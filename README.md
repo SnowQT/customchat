@@ -21,4 +21,4 @@
 
 
 **Instalacao:**
-Nome do resource "customchat" (!) e bote na pasta de resource. Tambem tenha certeza de parar o chat original e startar o customchat!
+Nome do resource "customchat" (!), bote na pasta de resource. Tambem tenha certeza de parar o chat original e startar o customchat!

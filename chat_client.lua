@@ -173,6 +173,9 @@ AddEventHandler('chatMessage', function(name, color, message, msgcolor, dots, oo
     if ooc == nil then
         ooc = false
     end
+    if msgcolor == nil then
+        msgcolor = {255,255,255}
+    end
     SendNUIMessage({
     name = name,
     color = color,

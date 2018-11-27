@@ -26,8 +26,8 @@ function stringSplit(inputstr, sep)
 end
 
 function vRPcc.getMyRPidentity()
-   local user_id = vRP.getUserId(source)
-  local identity = vRP.getUserIdentity(user_id)
+   local user_id = vRP.getUserId({source})
+  local identity = vRP.getUserIdentity({user_id})
         return user_id, identity
 end
 
@@ -56,15 +56,15 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
                 end
             end
             if msgi ~= nil then
-                local user_id = vRP.getUserId(source)
+                local user_id = vRP.getUserId({source})
                 if id and id ~= user_id then
-                    local usuarios = vRP.getUsersByGroup("user")
-                    local identity = vRP.getUserIdentity(user_id)
+                    local usuarios = vRP.getUsersByGroup({"user"})
+                    local identity = vRP.getUserIdentity({user_id})
                     local found = false
                     for k,v in pairs(usuarios) do
                         if  v == id then
                             TriggerClientEvent("chatMessage", source, "[PM]".. identity.name .. " " .. identity.firstname .. " ["..user_id.."] ", {0, 160, 214},msgi, {0,191,255})
-                            TriggerClientEvent("chatMessage", vRP.getUserSource(id), "[PM]".. identity.name .. " " .. identity.firstname .. " ["..user_id.."] ", {0, 160, 214},msgi, {0,191,255})
+                            TriggerClientEvent("chatMessage", vRP.getUserSource({id}), "[PM]".. identity.name .. " " .. identity.firstname .. " ["..user_id.."] ", {0, 160, 214},msgi, {0,191,255})
                             found = true
                             break
                         else
@@ -93,9 +93,9 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
                 local user_id = vRP.getUserId(source)
                 if id and id ~= user_id then
                     local identity = vRP.getUserIdentity(user_id)
-                    if vRP.getUserSource(id) ~= nil and Cclient.sussurro(source,vRP.getUserSource(id)) < 7.999 then
+                    if vRP.getUserSource(id) ~= nil and Cclient.sussurro(source,{vRP.getUserSource({id})}) < 7.999 then
                         TriggerClientEvent("chatMessage", source, "[S]".. identity.name .. " " .. identity.firstname .. " ["..user_id.."] ", {0, 160, 214},msgi, {0,191,255})
-                        TriggerClientEvent("chatMessage", vRP.getUserSource(id), "[S]".. identity.name .. " " .. identity.firstname .. " ["..user_id.."] ", {0, 160, 214},msgi, {0,191,255})
+                        TriggerClientEvent("chatMessage", vRP.getUserSource({id}), "[S]".. identity.name .. " " .. identity.firstname .. " ["..user_id.."] ", {0, 160, 214},msgi, {0,191,255})
                     else
                         TriggerClientEvent("chatMessage", source, "[S]", {255, 0, 0}, "Este ID esta muito longe de voce ou nao esta no servidor!", {255,80,80})
                     end
@@ -109,7 +109,7 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 
         if cmd == "/anrp" then
             if msg ~= nil then
-                local user_id = vRP.getUserId(source)
+                local user_id = vRP.getUserId({source})
                 if vRP.hasGroup(user_id, "admin") then
                     TriggerClientEvent("sendAnrpMsg", -1,tostring(msg))
                 end
@@ -119,8 +119,8 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 
         if cmd == "/anadm" then
             if msg ~= nil then
-                local user_id = vRP.getUserId(source)
-                local identity = vRP.getUserIdentity(user_id)
+                local user_id = vRP.getUserId({source})
+                local identity = vRP.getUserIdentity({user_id})
                 if vRP.hasGroup(user_id, "admin") then
                     TriggerClientEvent("sendAnadmMsg", -1,tostring(msg),identity,user_id)
                 end
@@ -133,7 +133,7 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
                 local user_id = vRP.getUserId(source)
                 local usuarios = vRP.getUsersByGroup("admin")
                 for k,v in pairs(usuarios) do
-                    TriggerClientEvent("sendOMsg", vRP.getUserSource(v),tostring(msg),vRP.getUserIdentity(user_id),user_id)
+                    TriggerClientEvent("sendOMsg", vRP.getUserSource({v}),tostring(msg),vRP.getUserIdentity({user_id}),user_id)
                 end
             end
             CancelEvent()
@@ -142,7 +142,7 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
         if cmd == "/canalr" then
             if msg ~= nil then
                 if tonumber(msg) and tonumber(msg) > 0 then
-                    userChannels[vRP.getUserId(source)] = tonumber(msg)
+                    userChannels[vRP.getUserId({source})] = tonumber(msg)
                     TriggerClientEvent("sendCanRMsg", source, msg)
                 else
                     TriggerClientEvent("chatMessage", source, "[RADIO]", {255, 0, 0}, "O canal precisa ser um numero positivo!", {255,80,80})
@@ -156,7 +156,7 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
             if msg ~= nil then
                 local user_id = vRP.getUserId(source)
                 if userChannels[user_id] ~= nil then
-                    TriggerClientEvent("sendRadioMsg", -1, msg, userChannels[user_id], vRP.getUserIdentity(user_id),user_id)
+                    TriggerClientEvent("sendRadioMsg", -1, msg, userChannels[user_id], vRP.getUserIdentity({user_id}),user_id)
                 else
                     TriggerClientEvent("chatMessage", source, "[RADIO]", {255, 0, 0}, "Voce nao esta conectado em nenhum canal!", {255,80,80})
                 end
@@ -166,22 +166,22 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 
         if cmd == "/me" then
 			if msg ~= nil then
-				TriggerClientEvent("sendProximityMessageMe", -1, source, vRP.getUserIdentity(vRP.getUserId(source)), tostring(msg))
+				TriggerClientEvent("sendProximityMessageMe", -1, source, vRP.getUserIdentity(vRP.getUserId({source})), tostring(msg))
 			end
         	CancelEvent()
         end
 		
         if cmd == "/do" then
 			if msg ~= nil then
-                TriggerClientEvent("sendProximityMessageDo", -1, source, vRP.getUserIdentity(vRP.getUserId(source)), tostring(msg))
+                TriggerClientEvent("sendProximityMessageDo", -1, source, vRP.getUserIdentity(vRP.getUserId({source})), tostring(msg))
 			end
         	CancelEvent()
         end
 		
         if cmd == "/g" then
             if msg ~= nil then
-              local user_id = vRP.getUserId(source)
-              local identity = vRP.getUserIdentity(user_id)
+                local user_id = vRP.getUserId({source})
+                local identity = vRP.getUserIdentity({user_id})
                 TriggerClientEvent("sendGlobalMessage", -1, source, name, tostring(msg),user_id,identity)
             end
             CancelEvent()
@@ -189,8 +189,8 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 
         if cmd == "/twt" then
             if msg ~= nil then
-              local user_id = vRP.getUserId(source)
-              local identity = vRP.getUserIdentity(user_id)
+                local user_id = vRP.getUserId({source})
+                local identity = vRP.getUserIdentity({user_id})
                 TriggerClientEvent("sendTwitterMessage", -1, source, name, tostring(msg),user_id,identity)
             end
             CancelEvent()
@@ -203,16 +203,16 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 		
 		if cmd == "/olx" then
             if msg ~= nil then
-              local user_id = vRP.getUserId(source)
-              local identity = vRP.getUserIdentity(user_id)
+                local user_id = vRP.getUserId({source})
+                local identity = vRP.getUserIdentity({user_id})
                 TriggerClientEvent("sendolxMessage", -1, source, name, tostring(msg),user_id,identity)
             end
             CancelEvent()
         end
         if cmd == "/ilegal" then
             if msg ~= nil then
-              local user_id = vRP.getUserId(source)
-              local identity = vRP.getUserIdentity(user_id)
+                local user_id = vRP.getUserId({source})
+                local identity = vRP.getUserIdentity({user_id})
                 TriggerClientEvent("sendIlegalMessage", -1, source, name, tostring(msg),user_id,identity)
             end
             CancelEvent()
@@ -220,8 +220,8 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 		
         if cmd == "/ooc" then
             if msg ~= nil then
-              local user_id = vRP.getUserId(source)
-              local identity = vRP.getUserIdentity(user_id)
+                local user_id = vRP.getUserId({source})
+                local identity = vRP.getUserIdentity({user_id})
                 TriggerClientEvent("sendOOCMessage", -1, source, tostring(msg),user_id,identity)
             end
             CancelEvent()
@@ -229,8 +229,8 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 
         if cmd == "/b" then
             if msg ~= nil then
-                local user_id = vRP.getUserId(source)
-                local identity = vRP.getUserIdentity(user_id)
+                local user_id = vRP.getUserId({source})
+                local identity = vRP.getUserIdentity({user_id})
                 TriggerClientEvent("sendBMessage", -1, source, tostring(msg),user_id,identity)
             end
             CancelEvent()
@@ -238,8 +238,8 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 
         if cmd == "/baixo" then
             if msg ~= nil then
-                local user_id = vRP.getUserId(source)
-                local identity = vRP.getUserIdentity(user_id)
+                local user_id = vRP.getUserId({source})
+                local identity = vRP.getUserIdentity({user_id})
                 TriggerClientEvent("sendQuietMessage", -1, source, tostring(msg),user_id,identity)
             end
             CancelEvent()
@@ -247,15 +247,15 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 
         if cmd == "/gritar" then
             if msg ~= nil then
-                local user_id = vRP.getUserId(source)
-                local identity = vRP.getUserIdentity(user_id)
+                local user_id = vRP.getUserId({source})
+                local identity = vRP.getUserIdentity({user_id})
                 TriggerClientEvent("sendLoudMessage", -1, source, tostring(msg),user_id,identity)
             end
             CancelEvent()
         end
 	else
 		if not WasEventCanceled() then
-			TriggerClientEvent('sendProximityMessage', -1, source, vRP.getUserIdentity(vRP.getUserId(source)),vRP.getUserId(source), message)
+			TriggerClientEvent('sendProximityMessage', -1, source, vRP.getUserIdentity(vRP.getUserId({source})),vRP.getUserId({source}), message)
         	CancelEvent()
 		end
 	end
@@ -300,6 +300,6 @@ end)
 --player join messages -- deactivated by default, uncomment to activate
 AddEventHandler("vRP:playerSpawn", function(user_id, source, first_spawn)
     --player join messages -- deactivated by default, uncomment to activate
-    local identity = vRP.getUserIdentity(user_id)
+    local identity = vRP.getUserIdentity({user_id})
         TriggerClientEvent('chatMessage', -1, 'Bem Vindo ao', { 102, 178, 255 }, '' .. identity.name ..' ' .. identity.firstname .. ' Uma verdadeira vida.')
 end)

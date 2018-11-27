@@ -90,10 +90,10 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
                 end
             end
             if msgi ~= nil then
-                local user_id = vRP.getUserId(source)
+                local user_id = vRP.getUserId({source})
                 if id and id ~= user_id then
-                    local identity = vRP.getUserIdentity(user_id)
-                    if vRP.getUserSource(id) ~= nil and Cclient.sussurro(source,{vRP.getUserSource({id})}) < 7.999 then
+                    local identity = vRP.getUserIdentity({user_id})
+                    if vRP.getUserSource({id}) ~= nil and Cclient.sussurro(source,{vRP.getUserSource({id})}) < 7.999 then
                         TriggerClientEvent("chatMessage", source, "[S]".. identity.name .. " " .. identity.firstname .. " ["..user_id.."] ", {0, 160, 214},msgi, {0,191,255})
                         TriggerClientEvent("chatMessage", vRP.getUserSource({id}), "[S]".. identity.name .. " " .. identity.firstname .. " ["..user_id.."] ", {0, 160, 214},msgi, {0,191,255})
                     else
@@ -110,7 +110,7 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
         if cmd == "/anrp" then
             if msg ~= nil then
                 local user_id = vRP.getUserId({source})
-                if vRP.hasGroup(user_id, "admin") then
+                if vRP.hasGroup({user_id, "admin"}) then
                     TriggerClientEvent("sendAnrpMsg", -1,tostring(msg))
                 end
             end
@@ -130,8 +130,8 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 
         if cmd == "/o" then
             if msg ~= nil then
-                local user_id = vRP.getUserId(source)
-                local usuarios = vRP.getUsersByGroup("admin")
+                local user_id = vRP.getUserId({source})
+                local usuarios = vRP.getUsersByGroup({"admin"})
                 for k,v in pairs(usuarios) do
                     TriggerClientEvent("sendOMsg", vRP.getUserSource({v}),tostring(msg),vRP.getUserIdentity({user_id}),user_id)
                 end
@@ -154,7 +154,7 @@ AddEventHandler('chatMessageEntered', function(name, color, message)
 
         if cmd == "/r" then
             if msg ~= nil then
-                local user_id = vRP.getUserId(source)
+                local user_id = vRP.getUserId({source})
                 if userChannels[user_id] ~= nil then
                     TriggerClientEvent("sendRadioMsg", -1, msg, userChannels[user_id], vRP.getUserIdentity({user_id}),user_id)
                 else

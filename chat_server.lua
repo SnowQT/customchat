@@ -3,8 +3,6 @@ local Proxy = module("vrp", "lib/Proxy")
 
 vRPcc = {}
 vRP = Proxy.getInterface("vRP")
-Proxy.addInterface("customchat",vRPcc)
-CCclient = Tunnel.getInterface("vRP")
 Cclient = Tunnel.getInterface("customchat","customchat")
 Tunnel.bindInterface("customchat",vRPcc )
 
